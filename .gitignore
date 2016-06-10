@@ -1,0 +1,143 @@
+# Xcode
+#
+# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+
+## Build generated
+build/
+DerivedData
+
+## Various settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+
+## Other
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
+
+## Obj-C/Swift specific
+*.hmap
+*.ipa
+
+# CocoaPods
+#
+# We recommend against adding the Pods directory to your .gitignore. However
+# you should judge for yourself, the pros and cons are mentioned at:
+# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
+#
+# Pods/
+
+# Carthage
+#
+# Add this line if you want to avoid checking in source code from Carthage dependencies.
+# Carthage/Checkouts
+
+Carthage/Build
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://github.com/fastlane/fastlane/blob/master/docs/Gitignore.md
+
+Cioffi_Core/fastlane/report.xml
+Cioffi_Core/fastlane/screenshots
+Cioffi_Core/fastlane/test_output
+Cioffi_Core/fastlane/slather_output
+
+Cioffi/fastlane/report.xml
+Cioffi/fastlane/screenshots
+Cioffi/fastlane/test_output
+
+# Jazzy
+Cioffi_Core/docs
+
+# AppCode
+.idea/
+Cioffi/Pods/Crashlytics/README.md
+Cioffi/Pods/Crashlytics/submit
+Cioffi/Pods/Crashlytics/Crashlytics.framework/README
+Cioffi/Pods/Crashlytics/Crashlytics.framework/submit
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/Crashlytics
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/Info.plist
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/run
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/submit
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/uploadDSYM
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/ANSCompatibility.h
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/Answers.h
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/CLSAttributes.h
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/CLSLogging.h
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/CLSReport.h
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/CLSStackFrame.h
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/Crashlytics.h
+Cioffi/Pods/Crashlytics/iOS/Crashlytics.framework/Modules/module.modulemap
+Cioffi/Pods/Fabric/README.md
+Cioffi/Pods/Fabric/run
+Cioffi/Pods/Fabric/upload-symbols
+Cioffi/Pods/Fabric/uploadDSYM
+Cioffi/Pods/Fabric/Fabric.framework/README
+Cioffi/Pods/Fabric/Fabric.framework/run
+Cioffi/Pods/Fabric/iOS/Fabric.framework/Fabric
+Cioffi/Pods/Fabric/iOS/Fabric.framework/Info.plist
+Cioffi/Pods/Fabric/iOS/Fabric.framework/run
+Cioffi/Pods/Fabric/iOS/Fabric.framework/uploadDSYM
+Cioffi/Pods/Fabric/iOS/Fabric.framework/Headers/FABAttributes.h
+Cioffi/Pods/Fabric/iOS/Fabric.framework/Headers/Fabric.h
+Cioffi/Pods/Fabric/iOS/Fabric.framework/Modules/module.modulemap
+Cioffi/Pods/Headers/Public/Crashlytics/Crashlytics/ANSCompatibility.h
+Cioffi/Pods/Headers/Public/Crashlytics/Crashlytics/Answers.h
+Cioffi/Pods/Headers/Public/Crashlytics/Crashlytics/CLSAttributes.h
+Cioffi/Pods/Headers/Public/Crashlytics/Crashlytics/CLSLogging.h
+Cioffi/Pods/Headers/Public/Crashlytics/Crashlytics/CLSReport.h
+Cioffi/Pods/Headers/Public/Crashlytics/Crashlytics/CLSStackFrame.h
+Cioffi/Pods/Headers/Public/Crashlytics/Crashlytics/Crashlytics.h
+Cioffi/Pods/Headers/Public/Fabric/Fabric/FABAttributes.h
+Cioffi/Pods/Headers/Public/Fabric/Fabric/Fabric.h
+Cioffi_Core/Pods/Crashlytics/README.md
+Cioffi_Core/Pods/Crashlytics/submit
+Cioffi_Core/Pods/Crashlytics/Crashlytics.framework/README
+Cioffi_Core/Pods/Crashlytics/Crashlytics.framework/submit
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/Crashlytics
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/Info.plist
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/run
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/submit
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/uploadDSYM
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/ANSCompatibility.h
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/Answers.h
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/CLSAttributes.h
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/CLSLogging.h
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/CLSReport.h
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/CLSStackFrame.h
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/Headers/Crashlytics.h
+Cioffi_Core/Pods/Crashlytics/iOS/Crashlytics.framework/Modules/module.modulemap
+Cioffi_Core/Pods/Fabric/README.md
+Cioffi_Core/Pods/Fabric/run
+Cioffi_Core/Pods/Fabric/upload-symbols
+Cioffi_Core/Pods/Fabric/uploadDSYM
+Cioffi_Core/Pods/Fabric/Fabric.framework/README
+Cioffi_Core/Pods/Fabric/Fabric.framework/run
+Cioffi_Core/Pods/Fabric/iOS/Fabric.framework/Fabric
+Cioffi_Core/Pods/Fabric/iOS/Fabric.framework/Info.plist
+Cioffi_Core/Pods/Fabric/iOS/Fabric.framework/run
+Cioffi_Core/Pods/Fabric/iOS/Fabric.framework/uploadDSYM
+Cioffi_Core/Pods/Fabric/iOS/Fabric.framework/Headers/FABAttributes.h
+Cioffi_Core/Pods/Fabric/iOS/Fabric.framework/Headers/Fabric.h
+Cioffi_Core/Pods/Fabric/iOS/Fabric.framework/Modules/module.modulemap
+Cioffi_Core/Pods/Headers/Public/Crashlytics/Crashlytics/ANSCompatibility.h
+Cioffi_Core/Pods/Headers/Public/Crashlytics/Crashlytics/Answers.h
+Cioffi_Core/Pods/Headers/Public/Crashlytics/Crashlytics/CLSAttributes.h
+Cioffi_Core/Pods/Headers/Public/Crashlytics/Crashlytics/CLSLogging.h
+Cioffi_Core/Pods/Headers/Public/Crashlytics/Crashlytics/CLSReport.h
+Cioffi_Core/Pods/Headers/Public/Crashlytics/Crashlytics/CLSStackFrame.h
+Cioffi_Core/Pods/Headers/Public/Crashlytics/Crashlytics/Crashlytics.h
+Cioffi_Core/Pods/Headers/Public/Fabric/Fabric/FABAttributes.h
+Cioffi_Core/Pods/Headers/Public/Fabric/Fabric/Fabric.h
