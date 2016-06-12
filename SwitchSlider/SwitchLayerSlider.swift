@@ -17,7 +17,7 @@ import UIKit
 			setNeedsDisplay()
 		}
 	}
-	@IBInspectable var buttonColor: UIColor = UIColor.redColor() {
+	@IBInspectable var buttonColor: UIColor = UIColor.whiteColor() {
 		didSet {
 			setNeedsDisplay()
 		}
@@ -169,40 +169,37 @@ import UIKit
 	}
 	
 	func endTouch() {
-//		trackLayer.animate(progressTo: 0.0, forDuration: 0.5, withDelegate: self)
-//		
-//		let buttonOrigin = originAlongTrack(forProgress: 0.0)
-//		buttonLayer.animate(positionTo: buttonOrigin, forDuration: 0.5, withDelegate: self)
-	}
-//	
-//	override func animationDidStart(anim: CAAnimation) {
-//		animationCount += 1
-//	}
-//	
-//	override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
-//		animationCount -= 0
-//	}
-	
-}
-
-class SliderLayer: TrackLayer {
-	
-	let buttonLayer: ButtonLayer = ButtonLayer()
-	
-	override var progress: CGFloat {
-		didSet {
-			updateButtonPosition()
+		if sliderLayer.progress < 1.0 {
+			let delay = Double(sliderLayer.progress * 0.5)
+			sliderLayer.animate(progressTo: 0.0, forDuration: delay, withDelegate: self)
 		}
 	}
 	
-	override var switchSlider: SliderDelegate? {
+}
+
+class SliderLayer: ProgressLayer {
+	
+	var buttonLayer: ButtonLayer = ButtonLayer()
+	var trackLayer: TrackLayer = TrackLayer()
+	
+	override var progress: CGFloat {
+		didSet {
+			trackLayer.progress = progress
+			buttonLayer.progress = progress
+//			trackLayer.opacity = Float(1.0 - progress)
+			updateLayout()
+		}
+	}
+	
+	var switchSlider: SliderDelegate? {
 		didSet {
 			buttonLayer.switchSlider = switchSlider
+			trackLayer.switchSlider = switchSlider
 		}
 	}
 	
 	var buttonSize: CGSize {
-		return CGSize(width: bounds.height - trackGap, height: bounds.height - trackGap)
+		return CGSize(width: bounds.height - (trackGap * 2.0), height: bounds.height - (trackGap * 2.0))
 	}
 
 	var trackGap: CGFloat = 8.0 {
@@ -224,19 +221,26 @@ class SliderLayer: TrackLayer {
 	
 	override init(layer: AnyObject) {
 		super.init(layer: layer)
-		setup()
+		if let layer = layer as? SliderLayer {
+			progress = layer.progress
+			buttonLayer = layer.buttonLayer
+			trackLayer = layer.trackLayer
+		}
 	}
 	
 	func setup() {
+		addSublayer(trackLayer)
 		addSublayer(buttonLayer)
 	}
 	
 	var minRange: CGFloat {
-		return (max(buttonSize.height, buttonSize.width) + trackGap) / 2.0
+		let gap = trackGap * 2.0
+		return (max(buttonSize.height, buttonSize.width) + gap) / 2.0
 	}
 	
 	var maxRange: CGFloat {
-		return bounds.width - ((max(buttonSize.height, buttonSize.width) + trackGap) / 2.0)
+		let gap = trackGap * 2.0
+		return bounds.width - ((max(buttonSize.height, buttonSize.width) + gap) / 2.0)
 	}
 	
 	var dragRange: CGFloat {
@@ -245,15 +249,18 @@ class SliderLayer: TrackLayer {
 	
 	func originAlongTrack(forProgress progress: CGFloat) -> CGPoint {
 		let pos = dragRange * progress
-		return CGPoint(x: pos + bounds.origin.x + (trackGap / 2.0),
-		               y: bounds.origin.y + (trackGap / 2.0))
+		return CGPoint(x: pos + bounds.origin.x + (trackGap),
+		               y: bounds.origin.y + (trackGap))
 	}
 	
-	func updateButtonPosition() {
+	func updateLayout() {
 		CATransaction.begin()
 		CATransaction.setDisableActions(true)
+		
+		trackLayer.frame = bounds
+		trackLayer.setNeedsDisplay()
+		
 		let buttonOrigin = originAlongTrack(forProgress: progress)
-		print("updateButtonPosition: \(buttonOrigin) x \(buttonSize)")
 		buttonLayer.frame.origin = buttonOrigin
 		buttonLayer.bounds.size = buttonSize
 		buttonLayer.setNeedsDisplay()
@@ -262,7 +269,7 @@ class SliderLayer: TrackLayer {
 	
 	override func layoutSublayers() {
 		super.layoutSublayers()
-		updateButtonPosition()
+		updateLayout()
 	}
 
 	func beginTrackingWithTouch(location: CGPoint) -> Bool {
@@ -272,7 +279,6 @@ class SliderLayer: TrackLayer {
 	func continueTrackingWithTouch(location: CGPoint) -> Bool {
 		let xPos = min(max(location.x, minRange), maxRange) - minRange
 		progress = min(max(0, xPos / dragRange), 1.0)
-		opacity = Float(1.0 - progress)
 		return true
 	}
 

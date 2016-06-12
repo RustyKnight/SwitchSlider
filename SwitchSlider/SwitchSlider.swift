@@ -18,7 +18,7 @@ import UIKit
 			layoutIfNeeded()
 		}
 	}
-	@IBInspectable var buttonColor: UIColor = UIColor.redColor() {
+	@IBInspectable var buttonColor: UIColor = UIColor.whiteColor() {
 		didSet {
 			trackLayer.setNeedsDisplay()
 			buttonLayer.setNeedsDisplay()
