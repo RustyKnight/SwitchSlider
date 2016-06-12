@@ -15,6 +15,8 @@
 		12FDCFF51D0946D10054D1DC /* SwitchSliderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FDCFF41D0946D10054D1DC /* SwitchSliderTests.swift */; };
 		12FDD0001D0946D10054D1DC /* SwitchSliderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FDCFFF1D0946D10054D1DC /* SwitchSliderUITests.swift */; };
 		12FDD00E1D0946F70054D1DC /* SwitchSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FDD00D1D0946F70054D1DC /* SwitchSlider.swift */; };
+		705686121D0D065A0083DC8A /* SwitchLayerSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705686111D0D065A0083DC8A /* SwitchLayerSlider.swift */; };
+		705686141D0D0B590083DC8A /* SliderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705686131D0D0B590083DC8A /* SliderDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		12FDCFFF1D0946D10054D1DC /* SwitchSliderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchSliderUITests.swift; sourceTree = "<group>"; };
 		12FDD0011D0946D10054D1DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		12FDD00D1D0946F70054D1DC /* SwitchSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchSlider.swift; sourceTree = "<group>"; };
+		705686111D0D065A0083DC8A /* SwitchLayerSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchLayerSlider.swift; sourceTree = "<group>"; };
+		705686131D0D0B590083DC8A /* SliderDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SliderDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +110,8 @@
 				12FDCFE81D0946D10054D1DC /* LaunchScreen.storyboard */,
 				12FDCFEB1D0946D10054D1DC /* Info.plist */,
 				12FDD00D1D0946F70054D1DC /* SwitchSlider.swift */,
+				705686111D0D065A0083DC8A /* SwitchLayerSlider.swift */,
+				705686131D0D0B590083DC8A /* SliderDelegate.swift */,
 			);
 			path = SwitchSlider;
 			sourceTree = "<group>";
@@ -259,8 +265,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				705686121D0D065A0083DC8A /* SwitchLayerSlider.swift in Sources */,
 				12FDCFE21D0946D10054D1DC /* ViewController.swift in Sources */,
 				12FDCFE01D0946D10054D1DC /* AppDelegate.swift in Sources */,
+				705686141D0D0B590083DC8A /* SliderDelegate.swift in Sources */,
 				12FDD00E1D0946F70054D1DC /* SwitchSlider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -488,6 +496,7 @@
 				12FDD0061D0946D10054D1DC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		12FDD0071D0946D10054D1DC /* Build configuration list for PBXNativeTarget "SwitchSliderTests" */ = {
 			isa = XCConfigurationList;
@@ -496,6 +505,7 @@
 				12FDD0091D0946D10054D1DC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		12FDD00A1D0946D10054D1DC /* Build configuration list for PBXNativeTarget "SwitchSliderUITests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +514,7 @@
 				12FDD00C1D0946D10054D1DC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
