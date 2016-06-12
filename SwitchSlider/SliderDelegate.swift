@@ -10,8 +10,12 @@ import UIKit
 
 protocol SliderDelegate {
 	
+	var text: String? {get set}
+	var textColor: UIColor {get set}
 	var trackColor: UIColor {get set}
 	var buttonColor: UIColor {get set}
 	var image: UIImage? {get set}
+	
+	var textFont: UIFont {get set}
 
 }

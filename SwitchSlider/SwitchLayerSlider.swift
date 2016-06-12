@@ -40,7 +40,7 @@ import UIKit
 			setNeedsDisplay()
 		}
 	}
-	@IBInspectable var font: UIFont = UIFont.systemFontOfSize(UIFont.systemFontSize()) {
+	@IBInspectable var textFont: UIFont = UIFont.systemFontOfSize(24.0) {
 		didSet {
 			invalidateIntrinsicContentSize()
 			setNeedsLayout()
@@ -142,7 +142,7 @@ import UIKit
 			let label = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 			label.numberOfLines = 0
 			label.lineBreakMode = NSLineBreakMode.ByWordWrapping
-			label.font = font
+			label.font = textFont
 			label.text = text
 			
 			label.sizeToFit()
@@ -222,10 +222,29 @@ class SliderLayer: ProgressLayer {
 	override init(layer: AnyObject) {
 		super.init(layer: layer)
 		if let layer = layer as? SliderLayer {
-			progress = layer.progress
 			buttonLayer = layer.buttonLayer
 			trackLayer = layer.trackLayer
+			progress = layer.progress
 		}
+	}
+
+	class override func needsDisplayForKey(key: String) -> Bool {
+		if key == "buttonLayer" || key == "trackLayer" {
+			return true
+		} else {
+			print(key)
+			return super.needsDisplayForKey(key)
+		}
+	}
+	
+	override func actionForKey(event: String) -> CAAction? {
+		var action: CAAction?
+		if event == "buttonLayer" || event == "trackLayer" {
+			action = self.animationForKey(event)
+		} else {
+			action = super.actionForKey(event)
+		}
+		return action
 	}
 	
 	func setup() {
