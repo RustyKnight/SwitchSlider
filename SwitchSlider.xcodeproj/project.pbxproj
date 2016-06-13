@@ -17,6 +17,8 @@
 		12FDD00E1D0946F70054D1DC /* SwitchSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FDD00D1D0946F70054D1DC /* SwitchSlider.swift */; };
 		705686121D0D065A0083DC8A /* SwitchLayerSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705686111D0D065A0083DC8A /* SwitchLayerSlider.swift */; };
 		705686141D0D0B590083DC8A /* SliderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 705686131D0D0B590083DC8A /* SliderDelegate.swift */; };
+		709AE5041D0E313E0064D670 /* SingleSwitchLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709AE5031D0E313E0064D670 /* SingleSwitchLayer.swift */; };
+		709AE5061D0E48590064D670 /* ColorUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709AE5051D0E48590064D670 /* ColorUtilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		12FDD00D1D0946F70054D1DC /* SwitchSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchSlider.swift; sourceTree = "<group>"; };
 		705686111D0D065A0083DC8A /* SwitchLayerSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchLayerSlider.swift; sourceTree = "<group>"; };
 		705686131D0D0B590083DC8A /* SliderDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SliderDelegate.swift; sourceTree = "<group>"; };
+		709AE5031D0E313E0064D670 /* SingleSwitchLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleSwitchLayer.swift; sourceTree = "<group>"; };
+		709AE5051D0E48590064D670 /* ColorUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorUtilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +116,8 @@
 				12FDD00D1D0946F70054D1DC /* SwitchSlider.swift */,
 				705686111D0D065A0083DC8A /* SwitchLayerSlider.swift */,
 				705686131D0D0B590083DC8A /* SliderDelegate.swift */,
+				709AE5031D0E313E0064D670 /* SingleSwitchLayer.swift */,
+				709AE5051D0E48590064D670 /* ColorUtilities.swift */,
 			);
 			path = SwitchSlider;
 			sourceTree = "<group>";
@@ -265,7 +271,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				709AE5061D0E48590064D670 /* ColorUtilities.swift in Sources */,
 				705686121D0D065A0083DC8A /* SwitchLayerSlider.swift in Sources */,
+				709AE5041D0E313E0064D670 /* SingleSwitchLayer.swift in Sources */,
 				12FDCFE21D0946D10054D1DC /* ViewController.swift in Sources */,
 				12FDCFE01D0946D10054D1DC /* AppDelegate.swift in Sources */,
 				705686141D0D0B590083DC8A /* SliderDelegate.swift in Sources */,

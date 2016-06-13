@@ -358,7 +358,7 @@ class TrackLayer: SwitchLayer {
 			CGContextSetTextDrawingMode(ctx, CGTextDrawingMode.Fill)
 			// Set text position and draw the line into the graphics context, text length and height is adjusted for
 			let xn = bounds.width - lineBounds.width - cornerRadius
-			let yn = -(bounds.centerOf().y - lineBounds.midY)
+			let yn = -(bounds.centerOf.y - lineBounds.midY)
 			CGContextSetTextPosition(ctx, xn, yn)
 			// the line of text is drawn - see https://developer.apple.com/library/ios/DOCUMENTATION/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html
 			// draw the line of text
@@ -481,15 +481,15 @@ public extension CGRect {
 		              height: CGRectGetHeight(self) - (insets.bottom + insets.top))
 	}
 	
-	func maxDimension() -> CGFloat {
+	var maxDimension: CGFloat {
 		return max(CGRectGetWidth(self), CGRectGetHeight(self))
 	}
 	
-	func minDimension() -> CGFloat {
+	var minDimension: CGFloat {
 		return min(CGRectGetWidth(self), CGRectGetHeight(self))
 	}
 	
-	func centerOf() -> CGPoint {
+	var centerOf: CGPoint {
 		return CGPoint(
 			x: CGRectGetMinX(self) + (CGRectGetWidth(self) / 2),
 			y: CGRectGetMinY(self) + (CGRectGetHeight(self) / 2))

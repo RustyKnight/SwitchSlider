@@ -57,7 +57,7 @@ import UIKit
 		}
 	}
 	
-	let trackGap: CGFloat = 8.0
+	var trackGap: CGFloat = 8.0
 	
 //	var positionAlongTrack: CGFloat = 0.0 {
 //		didSet {

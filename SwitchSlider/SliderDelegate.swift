@@ -17,5 +17,7 @@ protocol SliderDelegate {
 	var image: UIImage? {get set}
 	
 	var textFont: UIFont {get set}
+	
+	var trackGap: CGFloat {get set}
 
 }
