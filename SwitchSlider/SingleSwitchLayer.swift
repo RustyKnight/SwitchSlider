@@ -166,8 +166,12 @@ import UIKit
 	}
 	
 	func endTouch() {
-		if sliderLayer.progress < 1.0 {
-			let delay = Double(sliderLayer.progress * 0.5)
+		var progress = sliderLayer.progress
+		if sliderLayer.isRTL {
+			progress = 1.0 - progress
+		}
+		if progress < 1.0 {
+			let delay = Double(progress * 0.5)
 			sliderLayer.animate(progressTo: 0.0, forDuration: delay, withDelegate: self)
 		}
 	}
@@ -221,8 +225,10 @@ class SingleSwitchLayer: ProgressLayer {
 	
 	func originAlongTrack(forProgress progress: CGFloat) -> CGPoint {
 		let pos = dragRange * progress
-		return CGPoint(x: pos + bounds.origin.x + (trackGap),
-		               y: bounds.origin.y + (trackGap))
+		var point: CGPoint!
+		point = CGPoint(x: pos + bounds.origin.x + (trackGap),
+	                  y: bounds.origin.y + (trackGap))
+		return point
 	}
 	
 	func beginTrackingWithTouch(location: CGPoint) -> Bool {
@@ -233,7 +239,8 @@ class SingleSwitchLayer: ProgressLayer {
 		CATransaction.begin()
 		CATransaction.setDisableActions(true)
 		let xPos = min(max(location.x, minRange), maxRange) - minRange
-		progress = min(max(0, xPos / dragRange), 1.0)
+		let value = min(max(0, xPos / dragRange), 1.0)
+		progress = value
 		CATransaction.commit()
 		return true
 	}
@@ -247,8 +254,30 @@ class SingleSwitchLayer: ProgressLayer {
 	
 	var xoffset: CGFloat {
 		let cornerRadius = bounds.height / 2.0
-		let width = bounds.width - (cornerRadius * 2)
-		return bounds.origin.x + (width * progress)
+		if !isRTL {
+			let width = bounds.width - (cornerRadius * 2)
+			return bounds.origin.x + (width * progress)
+		} else {
+			return bounds.origin.x
+		}
+	}
+	
+	var widthOffset: CGFloat {
+		let cornerRadius = bounds.height / 2.0
+		var offset = bounds.size.width - (cornerRadius * 2)
+		if isRTL {
+			offset *= progress
+		}
+		
+		return offset
+	}
+	
+	var alpha: CGFloat {
+		if isRTL {
+			return progress
+		} else {
+			return progress - 1.0
+		}
 	}
 	
 	func drawTrackIn(context ctx: CGContext) {
@@ -258,9 +287,7 @@ class SingleSwitchLayer: ProgressLayer {
 			// Clip
 			let cornerRadius = bounds.height / 2.0
 			
-			var width = bounds.size.width - (cornerRadius * 2)
-//			var x = bounds.origin.x
-//			x = x + width * progress
+			var width = widthOffset //bounds.size.width - (cornerRadius * 2)
 			let x = xoffset
 			width = width - x
 			
@@ -271,8 +298,10 @@ class SingleSwitchLayer: ProgressLayer {
 			CGContextAddPath(ctx, path.CGPath)
 			
 			// Fill the track
-			let color = slider.trackColor.applyAlpha(1.0 - progress.toDouble).CGColor
-			CGContextSetFillColorWithColor(ctx, color)
+			var color = slider.trackColor
+			color = color.applyAlpha(alpha.toDouble)
+			
+			CGContextSetFillColorWithColor(ctx, color.CGColor)
 			CGContextFillPath(ctx)
 			
 			CGContextRestoreGState(ctx)
@@ -286,9 +315,10 @@ class SingleSwitchLayer: ProgressLayer {
 			
 			let cornerRadius = bounds.height / 2.0
 			let x = xoffset + cornerRadius
+			let width = widthOffset
 			
 			let clipBounds = CGRect(x: x, y: 0,
-			                        width: bounds.width - x, height: bounds.height)
+			                        width: width, height: bounds.height)
 			CGContextAddPath(ctx, UIBezierPath(rect: clipBounds).CGPath)
 			CGContextClip(ctx)
 			
@@ -309,7 +339,14 @@ class SingleSwitchLayer: ProgressLayer {
 			// set the drawing mode to stroke
 			CGContextSetTextDrawingMode(ctx, CGTextDrawingMode.Fill)
 			// Set text position and draw the line into the graphics context, text length and height is adjusted for
-			let xn = bounds.width - lineBounds.width - cornerRadius
+			
+			var xn = 0.0.cgFloat
+			if isRTL {
+				xn = bounds.origin.x + cornerRadius
+			} else {
+				xn = bounds.width - lineBounds.width - cornerRadius
+			}
+			
 			let yn = -(bounds.centerOf.y - lineBounds.midY)
 			CGContextSetTextPosition(ctx, xn, yn)
 			// the line of text is drawn - see https://developer.apple.com/library/ios/DOCUMENTATION/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html

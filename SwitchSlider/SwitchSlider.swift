@@ -224,12 +224,22 @@ class ProgressLayer: CALayer {
 		}
 	}
 	
+	var isRTL: Bool {
+		return UIApplication.sharedApplication().userInterfaceLayoutDirection == .RightToLeft
+	}
+	
 	required init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
+		if isRTL {
+			progress = 1.0
+		}
 	}
 	
 	override init() {
 		super.init()
+		if isRTL {
+			progress = 1.0
+		}
 	}
 	
 	override init(layer: AnyObject) {
@@ -263,15 +273,20 @@ class ProgressLayer: CALayer {
 	
 	func animate(progressTo value: CGFloat, forDuration duration: Double, withDelegate: AnyObject?) {
 		removeAnimationForKey("progress")
+		var toValue = value
+		let fromValue = progress
+		if isRTL {
+			toValue = 1.0 - value
+		}
 		let anim = CABasicAnimation(keyPath: "progress")
 		anim.delegate = withDelegate
-		anim.toValue = value
-		anim.fromValue = progress
+		anim.toValue = toValue
+		anim.fromValue = fromValue
 		anim.duration = duration
 		
 		addAnimation(anim, forKey: "progress")
 		
-		self.progress = value
+		self.progress = toValue
 	}
 }
 
