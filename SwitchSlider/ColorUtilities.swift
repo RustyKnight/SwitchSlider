@@ -17,17 +17,17 @@ public extension UIColor {
 		return UIColor.blend(self, with: color, by: ratio)
 	}
 	
-	public class func blend(color: UIColor, with: UIColor, by ratio: Double) -> UIColor {
+	public class func blend(_ color: UIColor, with: UIColor, by ratio: Double) -> UIColor {
 		let inverseRatio: CGFloat = 1.0 - ratio.toCGFloat
 		
-		let fromComponents = CGColorGetComponents(color.CGColor)
-		let toComponents = CGColorGetComponents(with.CGColor)
+		let fromComponents = color.cgColor.components
+		let toComponents = with.cgColor.components
 		
-		var red = toComponents[0] * ratio.toCGFloat + fromComponents[0] * inverseRatio
-		var green = toComponents[1] * ratio.toCGFloat + fromComponents[1] * inverseRatio
-		var blue = toComponents[2] * ratio.toCGFloat + fromComponents[2] * inverseRatio
-		var alpha = CGColorGetAlpha(with.CGColor) * ratio.toCGFloat +
-			CGColorGetAlpha(color.CGColor) * inverseRatio
+		var red = (toComponents?[0])! * ratio.toCGFloat + (fromComponents?[0])! * inverseRatio
+		var green = (toComponents?[1])! * ratio.toCGFloat + (fromComponents?[1])! * inverseRatio
+		var blue = (toComponents?[2])! * ratio.toCGFloat + (fromComponents?[2])! * inverseRatio
+		var alpha = with.cgColor.alpha * ratio.toCGFloat +
+			color.cgColor.alpha * inverseRatio
 		
 		red = max(0.0, min(1.0, red))
 		green = max(0.0, min(1.0, green))
@@ -37,24 +37,24 @@ public extension UIColor {
 		return UIColor(red: red, green: green, blue: blue, alpha: alpha)
 	}
 	
-	public func darken(by by: Double) -> UIColor {
-		let rgb = CGColorGetComponents(CGColor)
+	public func darken(by: Double) -> UIColor {
+		let rgb = cgColor.components
 		
-		let red = max(0, rgb[0] - 1.0.toCGFloat * by.toCGFloat)
-		let green = max(0, rgb[1] - 1.0.toCGFloat * by.toCGFloat)
-		let blue = max(0, rgb[2] - 1.0.toCGFloat * by.toCGFloat)
-		let alpha = CGColorGetAlpha(CGColor)
+		let red = max(0, (rgb?[0])! - 1.0.toCGFloat * by.toCGFloat)
+		let green = max(0, (rgb?[1])! - 1.0.toCGFloat * by.toCGFloat)
+		let blue = max(0, (rgb?[2])! - 1.0.toCGFloat * by.toCGFloat)
+		let alpha = cgColor.alpha
 		
 		return UIColor(red: red, green: green, blue: blue, alpha: alpha)
 	}
 	
-	public func brighten(by by:Double) -> UIColor {
-		let rgb = CGColorGetComponents(CGColor)
+	public func brighten(by:Double) -> UIColor {
+		let rgb = cgColor.components
 		
-		let red = min(1.0, rgb[0] + 1.0.toCGFloat * by.toCGFloat)
-		let green = min(1.0, rgb[1] + 1.0.toCGFloat * by.toCGFloat)
-		let blue = min(1.0, rgb[2] + 1.0.toCGFloat * by.toCGFloat)
-		let alpha = CGColorGetAlpha(CGColor)
+		let red = min(1.0, (rgb?[0])! + 1.0.toCGFloat * by.toCGFloat)
+		let green = min(1.0, (rgb?[1])! + 1.0.toCGFloat * by.toCGFloat)
+		let blue = min(1.0, (rgb?[2])! + 1.0.toCGFloat * by.toCGFloat)
+		let alpha = cgColor.alpha
 		
 		return UIColor(red: red, green: green, blue: blue, alpha: alpha)
 	}
@@ -72,15 +72,15 @@ public extension UIColor {
 	//			blue.toDouble * blue.toDouble)
 	//	}
 	
-	public func applyAlpha(alpha: Double) -> UIColor {
-		let rgb = CGColorGetComponents(CGColor)
-		return UIColor(red: rgb[0], green: rgb[0], blue: rgb[0], alpha: alpha.toCGFloat)
+	public func applyAlpha(_ alpha: Double) -> UIColor {
+		let rgb = cgColor.components
+		return UIColor(red: rgb![0], green: rgb![0], blue: rgb![0], alpha: alpha.toCGFloat)
 	}
 	
 	public func invert() -> UIColor {
-		let rgb = CGColorGetComponents(CGColor)
-		let alpha = CGColorGetAlpha(CGColor)
-		return UIColor(red: 1.0 - rgb[0], green: 1.0 - rgb[0], blue: 1.0 - rgb[0], alpha: alpha)
+		let rgb = cgColor.components
+		let alpha = cgColor.alpha
+		return UIColor(red: 1.0 - rgb![0], green: 1.0 - rgb![0], blue: 1.0 - rgb![0], alpha: alpha)
 	}
 }
 
@@ -100,13 +100,13 @@ public struct ColorBandBuilder {
 	public init() {
 	}
 	
-	public mutating func add(color color:UIColor, at: Double) -> ColorBandBuilder {
+	public mutating func add(color:UIColor, at: Double) -> ColorBandBuilder {
 		entries.append(ColorBandEntry(withColor: color, at: at))
 		return self
 	}
 	
 	public mutating func build() -> ColorBand {
-		entries.sortInPlace { (entry1, entry2) -> Bool in
+		entries.sort { (entry1, entry2) -> Bool in
 			return entry1.location > entry2.location
 		}
 		
@@ -128,7 +128,7 @@ public struct ColorBand {
 		for index in 0...colors.count {
 			tempEntries.append(ColorBandEntry(withColor: colors[index], at: locations[index]))
 		}
-		tempEntries.sortInPlace { (entry1, entry2) -> Bool in
+		tempEntries.sort { (entry1, entry2) -> Bool in
 			return entry1.location < entry2.location
 		}
 		entries = tempEntries
@@ -136,7 +136,7 @@ public struct ColorBand {
 	
 	public init(with entries: [ColorBandEntry]) {
 		var tempEntries = entries
-		tempEntries.sortInPlace { (entry1, entry2) -> Bool in
+		tempEntries.sort { (entry1, entry2) -> Bool in
 			return entry1.location < entry2.location
 		}
 		self.entries = tempEntries;
@@ -170,8 +170,8 @@ public struct ColorBand {
 	
 	The fractions should be ordered from lowest or highest
 	*/
-	public func colorAt(progress: Double) -> UIColor {
-		var blend = UIColor.blackColor()
+	public func colorAt(_ progress: Double) -> UIColor {
+		var blend = UIColor.black()
 		if entries.count > 1 {
 			let indicies = locationIndiciesFrom(forProgress: progress)
 			let fromFraction = entries[indicies[0]].location

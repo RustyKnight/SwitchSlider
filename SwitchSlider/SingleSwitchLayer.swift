@@ -13,21 +13,20 @@ import UIKit
 		didSet {
 			invalidateIntrinsicContentSize()
 			setNeedsLayout()
-			layoutIfNeeded()
 			setNeedsDisplay()
 		}
 	}
-	@IBInspectable var buttonColor: UIColor = UIColor.whiteColor() {
+	@IBInspectable var buttonColor: UIColor = UIColor.white() {
 		didSet {
 			setNeedsDisplay()
 		}
 	}
-	@IBInspectable var trackColor: UIColor = UIColor.darkGrayColor() {
+	@IBInspectable var trackColor: UIColor = UIColor.darkGray() {
 		didSet {
 			setNeedsDisplay()
 		}
 	}
-	@IBInspectable var textColor: UIColor = UIColor.lightGrayColor() {
+	@IBInspectable var textColor: UIColor = UIColor.lightGray() {
 		didSet {
 			setNeedsDisplay()
 		}
@@ -36,15 +35,13 @@ import UIKit
 		didSet {
 			invalidateIntrinsicContentSize()
 			setNeedsLayout()
-			layoutIfNeeded()
 			setNeedsDisplay()
 		}
 	}
-	@IBInspectable var textFont: UIFont = UIFont.systemFontOfSize(24.0) {
+	@IBInspectable var textFont: UIFont = UIFont.systemFont(ofSize: 24.0) {
 		didSet {
 			invalidateIntrinsicContentSize()
 			setNeedsLayout()
-			layoutIfNeeded()
 			setNeedsDisplay()
 		}
 	}
@@ -52,7 +49,6 @@ import UIKit
 		didSet {
 			invalidateIntrinsicContentSize()
 			setNeedsLayout()
-			layoutIfNeeded()
 			setNeedsDisplay()
 		}
 	}
@@ -85,8 +81,9 @@ import UIKit
 	}
 	
 	func setup() {
+		accessibilityValue = "This is a value"
 		sliderLayer.switchSlider = self
-		sliderLayer.contentsScale = UIScreen.mainScreen().scale
+		sliderLayer.contentsScale = UIScreen.main().scale
 		layer.addSublayer(sliderLayer)
 	}
 	
@@ -122,8 +119,8 @@ import UIKit
 		return maxRange - minRange
 	}
 	
-	override func layoutSublayersOfLayer(layer: CALayer) {
-		super.layoutSublayersOfLayer(layer)
+	override func layoutSublayers(of layer: CALayer) {
+		super.layoutSublayers(of: layer)
 		updateLayerFrames()
 	}
 	
@@ -136,32 +133,39 @@ import UIKit
 		}
 		var textWidth = dimeter * 3
 		if let text = text {
-			let label = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-			label.numberOfLines = 0
-			label.lineBreakMode = NSLineBreakMode.ByWordWrapping
-			label.font = textFont
-			label.text = text
-			
-			label.sizeToFit()
-			let size = label.frame
-			dimeter = max(dimeter, size.height)
-			textWidth = size.width
+			let string = NSString(string: text)
+			let attributes = [NSFontAttributeName: textFont]
+			let size = string.size(attributes: attributes)
+
+			textWidth = ceil(size.width)
 		}
 		
-		return CGSize(width: textWidth + dimeter + (trackGap * 3), height: dimeter + (trackGap * 2))
+		return CGSize(width: textWidth + (dimeter * 2.0) + (trackGap * 3), height: dimeter + (trackGap * 2))
 	}
 	
-	override func beginTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
-		let location = touch.locationInView(self)
-		return sliderLayer.beginTrackingWithTouch(location)
+	override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+		print("\(UIAccessibilityIsVoiceOverRunning()); \(touch.tapCount)")
+		var location = touch.location(in: self)
+		if UIAccessibilityIsVoiceOverRunning() {
+			location = convert(location, to: self)
+		}
+		print("beginTracking")
+		let result = sliderLayer.beginTrackingWithTouch(location)
+		print(result)
+		return result
 	}
 	
-	override func continueTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
-		let location = touch.locationInView(self)
-		return sliderLayer.continueTrackingWithTouch(location)
+	override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+		print("continueTracking")
+		let location = touch.location(in: self)
+		UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, self)
+		let result = sliderLayer.continueTrackingWithTouch(location)
+		print(result)
+		return result
 	}
 	
-	override func endTrackingWithTouch(touch: UITouch?, withEvent event: UIEvent?) {
+	override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
+		print("endTracking")
 		endTouch()
 	}
 	
@@ -231,11 +235,12 @@ class SingleSwitchLayer: ProgressLayer {
 		return point
 	}
 	
-	func beginTrackingWithTouch(location: CGPoint) -> Bool {
+	func beginTrackingWithTouch(_ location: CGPoint) -> Bool {
+		print("\(location) ~ \(buttonBounds)")
 		return buttonBounds.contains(location)
 	}
 	
-	func continueTrackingWithTouch(location: CGPoint) -> Bool {
+	func continueTrackingWithTouch(_ location: CGPoint) -> Bool {
 		CATransaction.begin()
 		CATransaction.setDisableActions(true)
 		let xPos = min(max(location.x, minRange), maxRange) - minRange
@@ -245,8 +250,8 @@ class SingleSwitchLayer: ProgressLayer {
 		return true
 	}
 	
-	override func drawInContext(ctx: CGContext) {
-		super.drawInContext(ctx)
+	override func draw(in ctx: CGContext) {
+		super.draw(in: ctx)
 		drawTrackIn(context: ctx)
 		drawTextIn(context: ctx)
 		drawButtonIn(context: ctx)
@@ -283,7 +288,7 @@ class SingleSwitchLayer: ProgressLayer {
 	func drawTrackIn(context ctx: CGContext) {
 		if let slider = switchSlider {
 			
-			CGContextSaveGState(ctx)
+			ctx.saveGState()
 			// Clip
 			let cornerRadius = bounds.height / 2.0
 			
@@ -295,23 +300,23 @@ class SingleSwitchLayer: ProgressLayer {
 			                        size: CGSize(width: width + (cornerRadius * 2),
 																height: bounds.height))
 			let path = UIBezierPath(roundedRect: fillBounds, cornerRadius: cornerRadius)
-			CGContextAddPath(ctx, path.CGPath)
+			ctx.addPath(path.cgPath)
 			
 			// Fill the track
 			var color = slider.trackColor
 			color = color.applyAlpha(alpha.toDouble)
 			
-			CGContextSetFillColorWithColor(ctx, color.CGColor)
-			CGContextFillPath(ctx)
+			ctx.setFillColor(color.cgColor)
+			ctx.fillPath()
 			
-			CGContextRestoreGState(ctx)
+			ctx.restoreGState()
 		}
 	}
 	
 	func drawTextIn(context ctx: CGContext) {
 		if let slider = switchSlider {
 			
-			CGContextSaveGState(ctx)
+			ctx.saveGState()
 			
 			let cornerRadius = bounds.height / 2.0
 			let x = xoffset + cornerRadius
@@ -319,25 +324,25 @@ class SingleSwitchLayer: ProgressLayer {
 			
 			let clipBounds = CGRect(x: x, y: 0,
 			                        width: width, height: bounds.height)
-			CGContextAddPath(ctx, UIBezierPath(rect: clipBounds).CGPath)
-			CGContextClip(ctx)
+			ctx.addPath(UIBezierPath(rect: clipBounds).cgPath)
+			ctx.clip()
 			
-			CGContextTranslateCTM(ctx, 0.0, bounds.height)
-			CGContextSetTextMatrix(ctx, CGAffineTransformMakeScale(1.0, -1.0))
+			ctx.translate(x: 0.0, y: bounds.height)
+			ctx.textMatrix = CGAffineTransform(scaleX: 1.0, y: -1.0)
 			let aFont = slider.textFont
 			// create a dictionary of attributes to be applied to the string
-			let color = slider.textColor.CGColor
+			let color = slider.textColor.cgColor
 			let attr = [NSFontAttributeName:aFont, NSForegroundColorAttributeName:color]
 			// create the attributed string
 			let text = CFAttributedStringCreate(nil, slider.text == nil ? "" : slider.text, attr)
 			// create the line of text
-			let line = CTLineCreateWithAttributedString(text)
+			let line = CTLineCreateWithAttributedString(text!)
 			// retrieve the bounds of the text
-			let lineBounds = CTLineGetBoundsWithOptions(line, CTLineBoundsOptions.UseOpticalBounds)
+			let lineBounds = CTLineGetBoundsWithOptions(line, CTLineBoundsOptions.useOpticalBounds)
 			// set the line width to stroke the text with
-			CGContextSetLineWidth(ctx, 1.5)
+			ctx.setLineWidth(1.5)
 			// set the drawing mode to stroke
-			CGContextSetTextDrawingMode(ctx, CGTextDrawingMode.Fill)
+			ctx.setTextDrawingMode(CGTextDrawingMode.fill)
 			// Set text position and draw the line into the graphics context, text length and height is adjusted for
 			
 			var xn = 0.0.cgFloat
@@ -348,13 +353,13 @@ class SingleSwitchLayer: ProgressLayer {
 			}
 			
 			let yn = -(bounds.centerOf.y - lineBounds.midY)
-			CGContextSetTextPosition(ctx, xn, yn)
+			ctx.setTextPosition(x: xn, y: yn)
 			// the line of text is drawn - see https://developer.apple.com/library/ios/DOCUMENTATION/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html
 			// draw the line of text
-			CGContextSetFillColorWithColor(ctx, slider.textColor.CGColor)
+			ctx.setFillColor(slider.textColor.cgColor)
 			CTLineDraw(line, ctx)
 			
-			CGContextRestoreGState(ctx)
+			ctx.restoreGState()
 		}
 	}
 	
@@ -370,7 +375,7 @@ class SingleSwitchLayer: ProgressLayer {
 	
 	func drawButtonIn(context ctx: CGContext) {
 		if let slider = switchSlider {
-			CGContextSaveGState(ctx)
+			ctx.saveGState()
 			
 			// Clip
 			let radius = CGFloat(min(buttonBounds.width, buttonBounds.height) / 2.0)
@@ -382,13 +387,13 @@ class SingleSwitchLayer: ProgressLayer {
 				clockwise: true)
 			
 			// Fill the track
-			CGContextSetFillColorWithColor(ctx, slider.buttonColor.CGColor)
-			CGContextAddPath(ctx, circlePath.CGPath)
-			CGContextFillPath(ctx)
+			ctx.setFillColor(slider.buttonColor.cgColor)
+			ctx.addPath(circlePath.cgPath)
+			ctx.fillPath()
 			
 			if let image = slider.image {
-				CGContextSaveGState(ctx);
-				CGContextTranslateCTM(ctx, buttonBounds.origin.x, buttonBounds.origin.y)
+				ctx.saveGState();
+				ctx.translate(x: buttonBounds.origin.x, y: buttonBounds.origin.y)
 				// Draw image
 				let rect = CGRect(x: (buttonBounds.width - image.size.width) / 2.0,
 				                  y: -buttonBounds.height + ((buttonBounds.height - image.size.height) / 2.0),
@@ -396,13 +401,13 @@ class SingleSwitchLayer: ProgressLayer {
 				                  height: image.size.height)
 //				let rect = CGRect(x: (buttonBounds.width - image.size.width) / 2.0,
 //				                  y: 0, width: image.size.width, height: image.size.height)
-				CGContextScaleCTM(ctx, 1.0, -1.0);
-				CGContextDrawImage(ctx, rect, image.CGImage)
-				CGContextScaleCTM(ctx, 1.0, 1.0);
-				CGContextRestoreGState(ctx)
+				ctx.scale(x: 1.0, y: -1.0);
+				ctx.draw(in: rect, image: image.cgImage!)
+				ctx.scale(x: 1.0, y: 1.0);
+				ctx.restoreGState()
 			}
 			
-			CGContextRestoreGState(ctx)
+			ctx.restoreGState()
 		}
 	}
 

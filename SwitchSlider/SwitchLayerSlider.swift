@@ -17,17 +17,17 @@ import UIKit
 			setNeedsDisplay()
 		}
 	}
-	@IBInspectable var buttonColor: UIColor = UIColor.whiteColor() {
+	@IBInspectable var buttonColor: UIColor = UIColor.white() {
 		didSet {
 			setNeedsDisplay()
 		}
 	}
-	@IBInspectable var trackColor: UIColor = UIColor.darkGrayColor() {
+	@IBInspectable var trackColor: UIColor = UIColor.darkGray() {
 		didSet {
 			setNeedsDisplay()
 		}
 	}
-	@IBInspectable var textColor: UIColor = UIColor.lightGrayColor() {
+	@IBInspectable var textColor: UIColor = UIColor.lightGray() {
 		didSet {
 			setNeedsDisplay()
 		}
@@ -40,7 +40,7 @@ import UIKit
 			setNeedsDisplay()
 		}
 	}
-	@IBInspectable var textFont: UIFont = UIFont.systemFontOfSize(24.0) {
+	@IBInspectable var textFont: UIFont = UIFont.systemFont(ofSize: 24.0) {
 		didSet {
 			invalidateIntrinsicContentSize()
 			setNeedsLayout()
@@ -89,7 +89,7 @@ import UIKit
 	
 	func setup() {
 		sliderLayer.switchSlider = self
-		sliderLayer.contentsScale = UIScreen.mainScreen().scale
+		sliderLayer.contentsScale = UIScreen.main().scale
 		layer.addSublayer(sliderLayer)
 	}
 	
@@ -125,8 +125,8 @@ import UIKit
 		return maxRange - minRange
 	}
 	
-	override func layoutSublayersOfLayer(layer: CALayer) {
-		super.layoutSublayersOfLayer(layer)
+	override func layoutSublayers(of layer: CALayer) {
+		super.layoutSublayers(of: layer)
 		updateLayerFrames()
 	}
 	
@@ -141,7 +141,7 @@ import UIKit
 		if let text = text {
 			let label = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
 			label.numberOfLines = 0
-			label.lineBreakMode = NSLineBreakMode.ByWordWrapping
+			label.lineBreakMode = NSLineBreakMode.byWordWrapping
 			label.font = textFont
 			label.text = text
 			
@@ -154,17 +154,17 @@ import UIKit
 		return CGSize(width: textWidth + dimeter + (trackGap * 3), height: dimeter + (trackGap * 2))
 	}
 	
-	override func beginTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
-		let location = touch.locationInView(self)
+	override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+		let location = touch.location(in: self)
 		return sliderLayer.beginTrackingWithTouch(location)
 	}
 	
-	override func continueTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
-		let location = touch.locationInView(self)
+	override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+		let location = touch.location(in: self)
 		return sliderLayer.continueTrackingWithTouch(location)
 	}
 	
-	override func endTrackingWithTouch(touch: UITouch?, withEvent event: UIEvent?) {
+	override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
 		endTouch()
 	}
 	
@@ -228,21 +228,21 @@ class SliderLayer: ProgressLayer {
 		}
 	}
 
-	class override func needsDisplayForKey(key: String) -> Bool {
+	class override func needsDisplay(forKey key: String) -> Bool {
 		if key == "buttonLayer" || key == "trackLayer" {
 			return true
 		} else {
 			print(key)
-			return super.needsDisplayForKey(key)
+			return super.needsDisplay(forKey: key)
 		}
 	}
 	
-	override func actionForKey(event: String) -> CAAction? {
+	override func action(forKey event: String) -> CAAction? {
 		var action: CAAction?
 		if event == "buttonLayer" || event == "trackLayer" {
-			action = self.animationForKey(event)
+			action = self.animation(forKey: event)
 		} else {
-			action = super.actionForKey(event)
+			action = super.action(forKey: event)
 		}
 		return action
 	}
@@ -291,11 +291,11 @@ class SliderLayer: ProgressLayer {
 		updateLayout()
 	}
 
-	func beginTrackingWithTouch(location: CGPoint) -> Bool {
+	func beginTrackingWithTouch(_ location: CGPoint) -> Bool {
 		return buttonLayer.frame.contains(location)
 	}
 	
-	func continueTrackingWithTouch(location: CGPoint) -> Bool {
+	func continueTrackingWithTouch(_ location: CGPoint) -> Bool {
 		let xPos = min(max(location.x, minRange), maxRange) - minRange
 		progress = min(max(0, xPos / dragRange), 1.0)
 		return true

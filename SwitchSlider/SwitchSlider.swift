@@ -225,7 +225,7 @@ class ProgressLayer: CALayer {
 	}
 	
 	var isRTL: Bool {
-		return UIApplication.sharedApplication().userInterfaceLayoutDirection == .RightToLeft
+		return UIApplication.shared().userInterfaceLayoutDirection == .rightToLeft
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -253,26 +253,26 @@ class ProgressLayer: CALayer {
 	Override actionForKey: and return a CAAnimation that prepares the animation for that property.
 	In our case, we will return an animation for the progress property.
 	*/
-	override func actionForKey(event: String) -> CAAction? {
+	override func action(forKey event: String) -> CAAction? {
 		var action: CAAction?
 		if event == "progress" {
-			action = self.animationForKey(event)
+			action = self.animation(forKey: event)
 		} else {
-			action = super.actionForKey(event)
+			action = super.action(forKey: event)
 		}
 		return action
 	}
 	
-	class override func needsDisplayForKey(key: String) -> Bool {
+	class override func needsDisplay(forKey key: String) -> Bool {
 		if key == "progress" {
 			return true
 		} else {
-			return super.needsDisplayForKey(key)
+			return super.needsDisplay(forKey: key)
 		}
 	}
 	
 	func animate(progressTo value: CGFloat, forDuration duration: Double, withDelegate: AnyObject?) {
-		removeAnimationForKey("progress")
+		removeAnimation(forKey: "progress")
 		var toValue = value
 		let fromValue = progress
 		if isRTL {
@@ -284,7 +284,7 @@ class ProgressLayer: CALayer {
 		anim.fromValue = fromValue
 		anim.duration = duration
 		
-		addAnimation(anim, forKey: "progress")
+		add(anim, forKey: "progress")
 		
 		self.progress = toValue
 	}
@@ -326,11 +326,11 @@ class TrackLayer: SwitchLayer {
 		super.init(layer: layer)
 	}
 	
-	override func drawInContext(ctx: CGContext) {
-		super.drawInContext(ctx)
+	override func draw(in ctx: CGContext) {
+		super.draw(in: ctx)
 		if let slider = switchSlider {
 			
-			CGContextSaveGState(ctx)
+			ctx.saveGState()
 			// Clip
 			let cornerRadius = bounds.height / 2.0
 			
@@ -344,43 +344,43 @@ class TrackLayer: SwitchLayer {
 			                        size: CGSize(width: width + (cornerRadius * 2),
 																height: bounds.height))
 			let path = UIBezierPath(roundedRect: fillBounds, cornerRadius: cornerRadius)
-			CGContextAddPath(ctx, path.CGPath)
+			ctx.addPath(path.cgPath)
 			
 			// Fill the track
-			CGContextSetFillColorWithColor(ctx, slider.trackColor.CGColor)
-			CGContextFillPath(ctx)
+			ctx.setFillColor(slider.trackColor.cgColor)
+			ctx.fillPath()
 			
 			let clipBounds = CGRect(x: x + cornerRadius, y: 0,
 			                        width: bounds.width - (x + cornerRadius), height: bounds.height)
-			CGContextAddPath(ctx, UIBezierPath(rect: clipBounds).CGPath)
-			CGContextClip(ctx)
+			ctx.addPath(UIBezierPath(rect: clipBounds).cgPath)
+			ctx.clip()
 			
-			CGContextTranslateCTM(ctx, 0.0, bounds.height)
-			CGContextSetTextMatrix(ctx, CGAffineTransformMakeScale(1.0, -1.0))
+			ctx.translate(x: 0.0, y: bounds.height)
+			ctx.textMatrix = CGAffineTransform(scaleX: 1.0, y: -1.0)
 			let aFont = slider.textFont
 			// create a dictionary of attributes to be applied to the string
-			let color = slider.textColor.CGColor
+			let color = slider.textColor.cgColor
 			let attr = [NSFontAttributeName:aFont, NSForegroundColorAttributeName:color]
 			// create the attributed string
 			let text = CFAttributedStringCreate(nil, slider.text == nil ? "" : slider.text, attr)
 			// create the line of text
-			let line = CTLineCreateWithAttributedString(text)
+			let line = CTLineCreateWithAttributedString(text!)
 			// retrieve the bounds of the text
-			let lineBounds = CTLineGetBoundsWithOptions(line, CTLineBoundsOptions.UseOpticalBounds)
+			let lineBounds = CTLineGetBoundsWithOptions(line, CTLineBoundsOptions.useOpticalBounds)
 			// set the line width to stroke the text with
-			CGContextSetLineWidth(ctx, 1.5)
+			ctx.setLineWidth(1.5)
 			// set the drawing mode to stroke
-			CGContextSetTextDrawingMode(ctx, CGTextDrawingMode.Fill)
+			ctx.setTextDrawingMode(CGTextDrawingMode.fill)
 			// Set text position and draw the line into the graphics context, text length and height is adjusted for
 			let xn = bounds.width - lineBounds.width - cornerRadius
 			let yn = -(bounds.centerOf.y - lineBounds.midY)
-			CGContextSetTextPosition(ctx, xn, yn)
+			ctx.setTextPosition(x: xn, y: yn)
 			// the line of text is drawn - see https://developer.apple.com/library/ios/DOCUMENTATION/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html
 			// draw the line of text
-			CGContextSetFillColorWithColor(ctx, slider.textColor.CGColor)
+			ctx.setFillColor(slider.textColor.cgColor)
 			CTLineDraw(line, ctx)
 			
-			CGContextRestoreGState(ctx)
+			ctx.restoreGState()
 		}
 	}
 	
@@ -423,10 +423,10 @@ class ButtonLayer: SwitchLayer {
 		return (180.0 * progress).toRadians
 	}
 	
-	override func drawInContext(ctx: CGContext) {
-		super.drawInContext(ctx)
+	override func draw(in ctx: CGContext) {
+		super.draw(in: ctx)
 		if let slider = switchSlider {
-			CGContextSaveGState(ctx)
+			ctx.saveGState()
 			
 			//		buttonLayer.transform = CATransform3DRotate(buttonLayer.transform, angle, 0.0, 0.0, 1.0)
 			// Clip
@@ -439,25 +439,25 @@ class ButtonLayer: SwitchLayer {
 				clockwise: true)
 			
 			// Fill the track
-			CGContextSetFillColorWithColor(ctx, slider.buttonColor.CGColor)
-			CGContextAddPath(ctx, circlePath.CGPath)
-			CGContextFillPath(ctx)
+			ctx.setFillColor(slider.buttonColor.cgColor)
+			ctx.addPath(circlePath.cgPath)
+			ctx.fillPath()
 			
 			if let image = slider.image {
-				CGContextSaveGState(ctx);
+				ctx.saveGState();
 				// Draw image
 				let rect = CGRect(x: (bounds.width - image.size.width) / 2.0,
 				                  y: -bounds.height + ((bounds.height - image.size.height) / 2.0),
 				                  width: image.size.width,
 				                  height: image.size.height)
-				CGContextScaleCTM(ctx, 1.0, -1.0);
-				CGContextDrawImage(ctx, rect, image.CGImage)
-				CGContextScaleCTM(ctx, 1.0, 1.0);
+				ctx.scale(x: 1.0, y: -1.0);
+				ctx.draw(in: rect, image: image.cgImage!)
+				ctx.scale(x: 1.0, y: 1.0);
 				//                image.drawAtPoint(CGPoint(x: x, y: y))
-				CGContextRestoreGState(ctx)
+				ctx.restoreGState()
 			}
 			
-			CGContextRestoreGState(ctx)
+			ctx.restoreGState()
 			
 		}
 	}
@@ -489,25 +489,25 @@ extension Float  {
 }
 
 public extension CGRect {
-	func withInsets(insets: UIEdgeInsets) -> CGRect {
-		return CGRect(x: CGRectGetMinX(self) + insets.left,
-		              y: CGRectGetMinY(self) + insets.top,
-		              width: CGRectGetWidth(self) - (insets.right + insets.left),
-		              height: CGRectGetHeight(self) - (insets.bottom + insets.top))
+	func withInsets(_ insets: UIEdgeInsets) -> CGRect {
+		return CGRect(x: self.minX + insets.left,
+		              y: self.minY + insets.top,
+		              width: self.width - (insets.right + insets.left),
+		              height: self.height - (insets.bottom + insets.top))
 	}
 	
 	var maxDimension: CGFloat {
-		return max(CGRectGetWidth(self), CGRectGetHeight(self))
+		return max(self.width, self.height)
 	}
 	
 	var minDimension: CGFloat {
-		return min(CGRectGetWidth(self), CGRectGetHeight(self))
+		return min(self.width, self.height)
 	}
 	
 	var centerOf: CGPoint {
 		return CGPoint(
-			x: CGRectGetMinX(self) + (CGRectGetWidth(self) / 2),
-			y: CGRectGetMinY(self) + (CGRectGetHeight(self) / 2))
+			x: self.minX + (self.width / 2),
+			y: self.minY + (self.height / 2))
 	}
 	
 }
