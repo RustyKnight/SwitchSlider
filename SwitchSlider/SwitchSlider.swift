@@ -8,214 +8,6 @@
 
 import UIKit
 
-//@IBDesignable class SwitchSlider: UIControl, SliderDelegate {
-//	@IBInspectable var image: UIImage? {
-//		didSet {
-//			trackLayer.setNeedsDisplay()
-//			buttonLayer.setNeedsDisplay()
-//			invalidateIntrinsicContentSize()
-//			setNeedsLayout()
-//			layoutIfNeeded()
-//		}
-//	}
-//	@IBInspectable var buttonColor: UIColor = UIColor.whiteColor() {
-//		didSet {
-//			trackLayer.setNeedsDisplay()
-//			buttonLayer.setNeedsDisplay()
-//			setNeedsDisplay()
-//		}
-//	}
-//	@IBInspectable var trackColor: UIColor = UIColor.darkGrayColor() {
-//		didSet {
-//			trackLayer.setNeedsDisplay()
-//			buttonLayer.setNeedsDisplay()
-//			setNeedsDisplay()
-//		}
-//	}
-//	@IBInspectable var textColor: UIColor = UIColor.lightGrayColor() {
-//		didSet {
-//			trackLayer.setNeedsDisplay()
-//			buttonLayer.setNeedsDisplay()
-//			setNeedsDisplay()
-//		}
-//	}
-//	@IBInspectable var text: String? {
-//		didSet {
-//			trackLayer.setNeedsDisplay()
-//			buttonLayer.setNeedsDisplay()
-//			invalidateIntrinsicContentSize()
-//			setNeedsLayout()
-//			layoutIfNeeded()
-//		}
-//	}
-//	@IBInspectable var textFont: UIFont = UIFont.systemFontOfSize(UIFont.systemFontSize()) {
-//		didSet {
-//			trackLayer.setNeedsDisplay()
-//			buttonLayer.setNeedsDisplay()
-//			invalidateIntrinsicContentSize()
-//			setNeedsLayout()
-//			layoutIfNeeded()
-//		}
-//	}
-//	
-//	override var frame: CGRect {
-//		didSet {
-//			updateLayerFrames()
-//		}
-//	}
-//	
-//	let trackLayer = TrackLayer()
-//	let buttonLayer = ButtonLayer()
-//	
-//	let trackGap: CGFloat = 8.0
-//	
-//	var positionAlongTrack: CGFloat = 0.0 {
-//		didSet {
-//			trackLayer.progress = positionAlongTrack
-//			buttonLayer.progress = positionAlongTrack
-//			setNeedsLayout()
-//			layoutIfNeeded()
-//			setNeedsDisplay()
-//		}
-//	}
-//	
-//	internal var animationCount: Int = 0 {
-//		didSet {
-//			if animationCount <= 0 {
-//				positionAlongTrack = 0.0
-//				animationCount = 0
-//			}
-//		}
-//	}
-//	
-//	override init(frame: CGRect) {
-//		super.init(frame: frame)
-//		setup()
-//	}
-//	
-//	required init?(coder aDecoder: NSCoder) {
-//		super.init(coder: aDecoder)
-//		setup()
-//	}
-//	
-//	func setup() {
-//		//        layer.borderColor = UIColor.redColor().CGColor
-//		//        layer.borderWidth = 1.0
-//		
-//		trackLayer.switchSlider = self
-//		trackLayer.contentsScale = UIScreen.mainScreen().scale
-//		layer.addSublayer(trackLayer)
-//		
-//		buttonLayer.switchSlider = self
-//		buttonLayer.contentsScale = UIScreen.mainScreen().scale
-//		layer.addSublayer(buttonLayer)
-//	}
-//	
-//	func originAlongTrack(forProgress progress: CGFloat) -> CGPoint {
-//		let pos = dragRange * progress
-//		return CGPoint(x: pos + bounds.origin.x + (trackGap / 2.0),
-//		                           y: bounds.origin.y + (trackGap / 2.0))
-//	}
-//	
-//	func updateLayerFrames() {
-//		CATransaction.begin()
-//		CATransaction.setDisableActions(true)
-//		
-//		trackLayer.frame = bounds
-//		trackLayer.setNeedsDisplay()
-//		
-//		let buttonOrigin = originAlongTrack(forProgress: positionAlongTrack)
-//		buttonLayer.frame.origin = buttonOrigin
-//		buttonLayer.bounds.size = buttonSize
-//		buttonLayer.setNeedsDisplay()
-//		
-//		CATransaction.commit()
-//	}
-//
-//	var buttonSize: CGSize {
-//		return CGSize(width: bounds.height - trackGap, height: bounds.height - trackGap)
-//	}
-//	
-//	var minRange: CGFloat {
-//		return (max(buttonSize.height, buttonSize.width) + trackGap) / 2.0
-//	}
-//	
-//	var maxRange: CGFloat {
-//		return bounds.width - ((max(buttonSize.height, buttonSize.width) + trackGap) / 2.0)
-//	}
-//	
-//	var dragRange: CGFloat {
-////		return bounds.width - max(buttonSize.height, buttonSize.width) - trackGap
-//		return maxRange - minRange
-//	}
-//	
-//	override func layoutSubviews() {
-//		super.layoutSubviews()
-//	}
-//	
-//	override func layoutSublayersOfLayer(layer: CALayer) {
-//		super.layoutSublayersOfLayer(layer)
-//		updateLayerFrames()
-//	}
-//	
-//	override func intrinsicContentSize() -> CGSize {
-//		var dimeter: CGFloat = 22.0
-//		if let image = image {
-//			let imageSize = max(image.size.width, image.size.height) * 1.5
-//			dimeter = max(dimeter, imageSize)
-//			
-//		}
-//		var textWidth = dimeter * 3
-//		if let text = text {
-//			let label = UILabel(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
-//			label.numberOfLines = 0
-//			label.lineBreakMode = NSLineBreakMode.ByWordWrapping
-//			label.font = textFont
-//			label.text = text
-//			
-//			label.sizeToFit()
-//			let size = label.frame
-//			dimeter = max(dimeter, size.height)
-//			textWidth = size.width
-//		}
-//		
-//		return CGSize(width: textWidth + dimeter + (trackGap * 3), height: dimeter + (trackGap * 2))
-//	}
-//	
-//	override func beginTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
-//		let location = touch.locationInView(self)
-//		return buttonLayer.frame.contains(location)
-//	}
-//	
-//	override func continueTrackingWithTouch(touch: UITouch, withEvent event: UIEvent?) -> Bool {
-//		let location = touch.locationInView(self)
-//		let xPos = min(max(location.x, minRange), maxRange) - minRange
-//		positionAlongTrack = min(max(0, xPos / dragRange), 1.0)
-//		endTouch()
-//		return positionAlongTrack < 1.0
-//	}
-//	
-//	override func endTrackingWithTouch(touch: UITouch?, withEvent event: UIEvent?) {
-//		endTouch()
-//	}
-//	
-//	func endTouch() {
-//		trackLayer.animate(progressTo: 0.0, forDuration: 0.5, withDelegate: self)
-//		
-//		let buttonOrigin = originAlongTrack(forProgress: 0.0)
-//		buttonLayer.animate(positionTo: buttonOrigin, forDuration: 0.5, withDelegate: self)
-//	}
-//	
-//	override func animationDidStart(anim: CAAnimation) {
-//		animationCount += 1
-//	}
-//	
-//	override func animationDidStop(anim: CAAnimation, finished flag: Bool) {
-//		animationCount -= 0
-//	}
-//	
-//}
-
 class ProgressLayer: CALayer {
 	
 	var progress: CGFloat = 0.0 {
@@ -225,7 +17,7 @@ class ProgressLayer: CALayer {
 	}
 	
 	var isRTL: Bool {
-		return UIApplication.shared().userInterfaceLayoutDirection == .rightToLeft
+		return UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -241,8 +33,8 @@ class ProgressLayer: CALayer {
 			progress = 1.0
 		}
 	}
-	
-	override init(layer: AnyObject) {
+    
+    override init(layer: Any) {
 		super.init(layer: layer)
 		if let layer = layer as? ProgressLayer {
 			progress = layer.progress
@@ -271,7 +63,7 @@ class ProgressLayer: CALayer {
 		}
 	}
 	
-	func animate(progressTo value: CGFloat, forDuration duration: Double, withDelegate: AnyObject?) {
+	func animate(progressTo value: CGFloat, forDuration duration: Double, withDelegate: CAAnimationDelegate?) {
 		removeAnimation(forKey: "progress")
 		var toValue = value
 		let fromValue = progress
@@ -302,7 +94,7 @@ class SwitchLayer: ProgressLayer {
 		super.init(coder: aDecoder)
 	}
 	
-	override init(layer: AnyObject) {
+	override init(layer: Any) {
 		super.init(layer: layer)
 		if let layer = layer as? TrackLayer {
 			switchSlider = layer.switchSlider
@@ -310,7 +102,6 @@ class SwitchLayer: ProgressLayer {
 	}
 	
 }
-
 
 class TrackLayer: SwitchLayer {
 	
@@ -322,7 +113,7 @@ class TrackLayer: SwitchLayer {
 		super.init(coder: aDecoder)
 	}
 	
-	override init(layer: AnyObject) {
+	override init(layer: Any) {
 		super.init(layer: layer)
 	}
 	
@@ -340,9 +131,13 @@ class TrackLayer: SwitchLayer {
 			x = x + width * progress
 			width = width - x
 			
-			let fillBounds = CGRect(origin: CGPoint(x: x, y: bounds.origin.y),
-			                        size: CGSize(width: width + (cornerRadius * 2),
-																height: bounds.height))
+            let fillBounds = CGRect(
+                origin: CGPoint(x: x, y: bounds.origin.y),
+                size: CGSize(
+                    width: width + (cornerRadius * 2),
+                    height: bounds.height
+                )
+            )
 			let path = UIBezierPath(roundedRect: fillBounds, cornerRadius: cornerRadius)
 			ctx.addPath(path.cgPath)
 			
@@ -355,14 +150,14 @@ class TrackLayer: SwitchLayer {
 			ctx.addPath(UIBezierPath(rect: clipBounds).cgPath)
 			ctx.clip()
 			
-			ctx.translate(x: 0.0, y: bounds.height)
+			ctx.translateBy(x: 0.0, y: bounds.height)
 			ctx.textMatrix = CGAffineTransform(scaleX: 1.0, y: -1.0)
 			let aFont = slider.textFont
 			// create a dictionary of attributes to be applied to the string
 			let color = slider.textColor.cgColor
-			let attr = [NSFontAttributeName:aFont, NSForegroundColorAttributeName:color]
+            let attr = [NSAttributedString.Key.font:aFont, NSAttributedString.Key.foregroundColor:color] as [NSAttributedString.Key : Any]
 			// create the attributed string
-			let text = CFAttributedStringCreate(nil, slider.text == nil ? "" : slider.text, attr)
+            let text = CFAttributedStringCreate(nil, slider.text == nil ? "" as CFString : slider.text as CFString?, attr as CFDictionary)
 			// create the line of text
 			let line = CTLineCreateWithAttributedString(text!)
 			// retrieve the bounds of the text
@@ -374,7 +169,7 @@ class TrackLayer: SwitchLayer {
 			// Set text position and draw the line into the graphics context, text length and height is adjusted for
 			let xn = bounds.width - lineBounds.width - cornerRadius
 			let yn = -(bounds.centerOf.y - lineBounds.midY)
-			ctx.setTextPosition(x: xn, y: yn)
+            ctx.textPosition = CGPoint(x: xn, y: yn)
 			// the line of text is drawn - see https://developer.apple.com/library/ios/DOCUMENTATION/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html
 			// draw the line of text
 			ctx.setFillColor(slider.textColor.cgColor)
@@ -396,28 +191,9 @@ class ButtonLayer: SwitchLayer {
 		super.init(coder: aDecoder)
 	}
 	
-	override init(layer: AnyObject) {
+	override init(layer: Any) {
 		super.init(layer: layer)
 	}
-	
-//	func animate(positionTo value: CGPoint, forDuration duration: Double, withDelegate: AnyObject?) {
-//		removeAnimationForKey("position")
-//		
-//		let adjustedOrigin = CGPoint(x: value.x + bounds.width / 2.0, y: value.y + bounds.height / 2.0)
-//		
-//		let anim = CABasicAnimation(keyPath: "position")
-//		anim.delegate = withDelegate
-//		anim.toValue = NSValue(CGPoint: adjustedOrigin)
-//		anim.fromValue = NSValue(CGPoint: position)
-//		anim.duration = duration
-//		
-//		addAnimation(anim, forKey: "position")
-//		
-//		CATransaction.begin()
-//		CATransaction.setDisableActions(true)
-//		position = adjustedOrigin
-//		CATransaction.commit()
-//	}
 	
 	var angle: CGFloat {
 		return (180.0 * progress).toRadians
@@ -435,8 +211,9 @@ class ButtonLayer: SwitchLayer {
 				arcCenter: CGPoint(x: bounds.width / 2.0, y: bounds.height / 2.0),
 				radius: radius,
 				startAngle: CGFloat(0),
-				endAngle:CGFloat(M_PI * 2),
-				clockwise: true)
+				endAngle:CGFloat(Double.pi * 2),
+				clockwise: true
+            )
 			
 			// Fill the track
 			ctx.setFillColor(slider.buttonColor.cgColor)
@@ -450,10 +227,9 @@ class ButtonLayer: SwitchLayer {
 				                  y: -bounds.height + ((bounds.height - image.size.height) / 2.0),
 				                  width: image.size.width,
 				                  height: image.size.height)
-				ctx.scale(x: 1.0, y: -1.0);
-				ctx.draw(in: rect, image: image.cgImage!)
-				ctx.scale(x: 1.0, y: 1.0);
-				//                image.drawAtPoint(CGPoint(x: x, y: y))
+				ctx.scaleBy(x: 1.0, y: -1.0);
+                ctx.draw(image.cgImage!, in: rect)
+				ctx.scaleBy(x: 1.0, y: 1.0);
 				ctx.restoreGState()
 			}
 			
@@ -465,26 +241,26 @@ class ButtonLayer: SwitchLayer {
 }
 
 extension Int {
-	var toRadians: Double { return Double(self) * M_PI / 180 }
-	var toDegrees: Double { return Double(self) * 180 / M_PI }
+	var toRadians: Double { return Double(self) * Double.pi / 180 }
+	var toDegrees: Double { return Double(self) * 180 / Double.pi }
 }
 
 extension Double {
-	var toRadians: Double { return self * M_PI / 180 }
-	var toDegrees: Double { return self * 180 / M_PI }
+	var toRadians: Double { return self * Double.pi / 180 }
+	var toDegrees: Double { return self * 180 / Double.pi }
 	var cgFloat: CGFloat { return CGFloat(self) }
 }
 
 extension CGFloat {
 	var doubleValue:      Double  { return Double(self) }
-	var toRadians: CGFloat { return CGFloat(doubleValue * M_PI / 180) }
-	var toDegrees: CGFloat { return CGFloat(doubleValue * 180 / M_PI) }
+	var toRadians: CGFloat { return CGFloat(doubleValue * Double.pi / 180) }
+	var toDegrees: CGFloat { return CGFloat(doubleValue * 180 / Double.pi) }
 }
 
 extension Float  {
 	var doubleValue:      Double { return Double(self) }
-	var toRadians: Float  { return Float(doubleValue * M_PI / 180) }
-	var toDegrees: Float  { return Float(doubleValue * 180 / M_PI) }
+	var toRadians: Float  { return Float(doubleValue * Double.pi / 180) }
+	var toDegrees: Float  { return Float(doubleValue * 180 / Double.pi) }
 	var cgFloat: CGFloat { return CGFloat(self) }
 }
 

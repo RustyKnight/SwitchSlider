@@ -17,20 +17,14 @@ import UIKit
 			setNeedsDisplay()
 		}
 	}
-	@IBInspectable var buttonColor: UIColor = UIColor.white() {
-		didSet {
-			setNeedsDisplay()
-		}
+	@IBInspectable var buttonColor: UIColor = UIColor.white {
+		didSet { setNeedsDisplay() }
 	}
-	@IBInspectable var trackColor: UIColor = UIColor.darkGray() {
-		didSet {
-			setNeedsDisplay()
-		}
+	@IBInspectable var trackColor: UIColor = UIColor.darkGray {
+		didSet { setNeedsDisplay() }
 	}
-	@IBInspectable var textColor: UIColor = UIColor.lightGray() {
-		didSet {
-			setNeedsDisplay()
-		}
+	@IBInspectable var textColor: UIColor = UIColor.lightGray {
+		didSet { setNeedsDisplay() }
 	}
 	@IBInspectable var text: String? {
 		didSet {
@@ -89,7 +83,7 @@ import UIKit
 	
 	func setup() {
 		sliderLayer.switchSlider = self
-		sliderLayer.contentsScale = UIScreen.main().scale
+		sliderLayer.contentsScale = UIScreen.main.scale
 		layer.addSublayer(sliderLayer)
 	}
 	
@@ -129,8 +123,8 @@ import UIKit
 		super.layoutSublayers(of: layer)
 		updateLayerFrames()
 	}
-	
-	override func intrinsicContentSize() -> CGSize {
+    
+    override var intrinsicContentSize: CGSize {
 		var dimeter: CGFloat = 22.0
 		if let image = image {
 			let imageSize = max(image.size.width, image.size.height) * 1.5
@@ -174,7 +168,10 @@ import UIKit
 			sliderLayer.animate(progressTo: 0.0, forDuration: delay, withDelegate: self)
 		}
 	}
-	
+}
+
+extension SwitchLayerSlider: CAAnimationDelegate {
+    
 }
 
 class SliderLayer: ProgressLayer {
@@ -219,7 +216,7 @@ class SliderLayer: ProgressLayer {
 		setup()
 	}
 	
-	override init(layer: AnyObject) {
+	override init(layer: Any) {
 		super.init(layer: layer)
 		if let layer = layer as? SliderLayer {
 			buttonLayer = layer.buttonLayer
